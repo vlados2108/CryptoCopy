@@ -5,31 +5,24 @@ import Modal from '../Modal'
 import BackpackModalBody from '../BackpackModalBody'
 import { appPrefix, formatNumber } from '../Utility'
 import { useGlobalContext } from '../../Context'
+import { Coin } from '@/app/types'
 import styles from './Header.module.scss'
 
 const Header = (): ReactElement => {
-    const [price1, setPrice1] = useState(0)
-    const [price2, setPrice2] = useState(0)
-    const [price3, setPrice3] = useState(0)
+    const [coins, setCoins] = useState<Coin[]>([])
     const [backpackSum, setBackpackSum] = useState(0)
     const [diff, setDiff] = useState(0)
-    const [modalWidth, setModalWidth] = useState(40);
+    const [modalWidth, setModalWidth] = useState(40)
 
     const [backpackModalActive, setBackpackModalActive] = useState(false)
     const { coinAdded } = useGlobalContext()
     useEffect(() => {
-        axios.get(`https://api.coincap.io/v2/assets/bitcoin`).then((res) => {
-            setPrice1(res.data.data.priceUsd)
-        })
-        axios.get(`https://api.coincap.io/v2/assets/ethereum`).then((res) => {   
-            setPrice2(res.data.data.priceUsd)
-        })
-        axios.get(`https://api.coincap.io/v2/assets/solana`).then((res) => {
-            setPrice3(res.data.data.priceUsd)
+        axios.get(`https://api.coincap.io/v2/assets?limit=3`).then((res) => {
+            setCoins(res.data.data)
         })
         if (typeof window !== 'undefined') {
-            setModalWidth(window.innerWidth <= 480 ? 90 : 40);
-          }
+            setModalWidth(window.innerWidth <= 480 ? 90 : 40)
+        }
     }, [])
 
     useEffect(() => {
@@ -63,24 +56,18 @@ const Header = (): ReactElement => {
         <div className={styles['header-container']}>
             <div className={styles['header-trending-container']}>
                 <div className={styles['header-trending']}>Trending:</div>
-                <div className={styles['header-tending-row']}>
-                    <div className={styles['header-trending-text']}>BTC:</div>
-                    <div className={styles['header-trending-text']}>
-                        {formatNumber(price1)} $
-                    </div>
-                </div>
-                <div className={styles['header-tending-row']}>
-                    <div className={styles['header-trending-text']}>ETH:</div>
-                    <div className={styles['header-trending-text']}>
-                        {formatNumber(price2)} $
-                    </div>
-                </div>
-                <div className={styles['header-tending-row']}>
-                    <div className={styles['header-trending-text']}>SOL:</div>
-                    <div className={styles['header-trending-text']}>
-                        {formatNumber(price3)} $
-                    </div>
-                </div>
+                {coins.map((coin) => {
+                    return (
+                        <div className={styles['header-tending-row']}>
+                            <div className={styles['header-trending-text']}>
+                                {coin.symbol}:
+                            </div>
+                            <div className={styles['header-trending-text']}>
+                                {formatNumber(coin.priceUsd)} $
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
 
             <div
@@ -112,5 +99,5 @@ const Header = (): ReactElement => {
         </div>
     )
 }
- 
+
 export default Header
