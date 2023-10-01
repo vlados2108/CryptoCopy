@@ -1,0 +1,11 @@
+.input{
+    font-size:20px;
+    border-radius: 12px;
+    border-width: 0.1px;
+}
+
+@media(max-width:480px){
+    .input{
+        font-size: calc(15px + (20 - 15) * ((100vw - 390px) / (1920 - 390)));
+    }
+}

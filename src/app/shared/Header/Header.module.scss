@@ -1,0 +1,108 @@
+.header-container {
+    background-color: #9c9c9b;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    .header-trending-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        width: 50%;
+        height: 100%;
+        margin-left: 10px;
+        align-items: center;
+        .header-trending {
+            margin: 10px 0;
+            font-weight: 600;
+            font-size: 30px;
+        }
+        .header-tending-row {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            background-color: white;
+            border-radius: 6px;
+            margin: 10px 0;
+            padding: 0 10px;
+            .header-trending-text {
+                font-size: 20px;
+            }
+        }
+    }
+
+    .header-backpack-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        width: 50%;
+        height: 100%;
+        align-items: center;
+        justify-content: end;
+        cursor: pointer;
+        border-radius: 12px;
+
+        &:hover{
+            background-color: #DFDEDE;
+            transition: all 0.5s;
+        }
+        .header-backpack {
+            margin: 10px 0;
+            font-weight: 600;
+            font-size: 30px;
+        }
+        .header-backpack-text {
+            margin: 10px 0;
+            font-size: 20px;
+            background-color: white;
+            border-radius: 6px;
+            padding: 0 10px;
+            &.price {
+            }
+
+            &.diff {
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .header-container {
+        .header-trending-container {
+            gap: 0px;
+            .header-trending {
+                font-size: calc(
+                    20px + (30 - 20) * ((100vw - 390px) / (1920 - 390))
+                );
+            }
+
+            .header-tending-row {
+                gap: 15px;
+                .header-trending-text {
+                    font-size: calc(
+                        15px + (20 - 15) * ((100vw - 390px) / (1920 - 390))
+                    );
+                }
+            }
+        }
+        .header-backpack-container {
+            gap: 0px;
+    
+            .header-backpack {
+                font-size: calc(
+                        20px + (30 - 20) * ((100vw - 390px) / (1920 - 390))
+                    );
+            }
+            .header-backpack-text {
+                font-size: calc(
+                    15px + (20 - 15) * ((100vw - 390px) / (1920 - 390))
+                );
+                &.price {
+                }
+    
+                &.diff {
+                }
+            }
+        }
+    }
+    
+}

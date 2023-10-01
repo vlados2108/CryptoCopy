@@ -1,0 +1,14 @@
+.button {
+    border-radius: 6px;
+    border-width: 0.1px;
+    font-size: 25px;
+    &:hover{
+        background-color: #DFDEDE;
+        transition: all 0.5s;
+    }
+}
+@media (max-width: 1800px) {
+    .button {
+        font-size: calc(15px + (25 - 15) * ((100vw - 390px) / (1920 - 390)));
+    }
+}

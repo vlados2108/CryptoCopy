@@ -1,0 +1,25 @@
+.addBody-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    .addBody-input {
+        text-align: center;
+        height: 40px;
+        margin-bottom: 5px;
+        width: 100%;
+    }
+    .addBody-btn {
+        height: 40px;
+        background: #b8b9bd;
+        &:hover {
+            background-color: #dfdede;
+            transition: all 0.5s;
+        }
+    }
+    .addBody-error {
+        height: auto;
+        text-align: center;
+        font-size: 20px;
+    }
+}

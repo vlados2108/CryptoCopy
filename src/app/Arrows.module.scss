@@ -1,0 +1,8 @@
+.filter-image-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .filter-image {
+        width: 20px;
+    }
+}

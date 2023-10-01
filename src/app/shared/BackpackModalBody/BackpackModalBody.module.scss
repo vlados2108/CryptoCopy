@@ -1,0 +1,60 @@
+.backpackContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .backpack-header {
+        font-size: 40px;
+        font-weight: 600;
+    }
+    .backpack-body {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        justify-content: center;
+        .backpack-column {
+            align-self: center;
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+            &.header {
+                font-size: 30px;
+                font-weight: 600;
+            }
+            .backpack-remove-btn{
+                background-color: #9c9c9b;
+                &:hover{
+                    background-color: #DFDEDE;
+                    transition: all 0.5s;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .backpack-container {
+
+        .backpack-header {
+            font-size: calc(
+                30px + (40 - 30) * ((100vw - 390px) / (1920 - 390))
+            );
+            font-weight: 600;
+        }
+        .backpack-body {
+            
+            .backpack-column {
+                text-align: center;
+                font-size: calc(
+                    15px + (20 - 15) * ((100vw - 390px) / (1920 - 390))
+                );
+                &.header {
+                    font-size: calc(
+                        20px + (30 - 20) * ((100vw - 390px) / (1920 - 390))
+                    );
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+}
