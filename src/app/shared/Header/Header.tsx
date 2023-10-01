@@ -13,6 +13,8 @@ const Header = (): ReactElement => {
     const [price3, setPrice3] = useState(0)
     const [backpackSum, setBackpackSum] = useState(0)
     const [diff, setDiff] = useState(0)
+    const [modalWidth, setModalWidth] = useState(40);
+
     const [backpackModalActive, setBackpackModalActive] = useState(false)
     const { coinAdded } = useGlobalContext()
     useEffect(() => {
@@ -25,6 +27,9 @@ const Header = (): ReactElement => {
         axios.get(`https://api.coincap.io/v2/assets/solana`).then((res) => {
             setPrice3(res.data.data.priceUsd)
         })
+        if (typeof window !== 'undefined') {
+            setModalWidth(window.innerWidth <= 480 ? 90 : 40);
+          }
     }, [])
 
     useEffect(() => {
@@ -100,12 +105,12 @@ const Header = (): ReactElement => {
             <Modal
                 active={backpackModalActive}
                 setActive={setBackpackModalActive}
-                width={window.innerWidth <= 480 ? 90 : 40}
+                width={modalWidth}
             >
                 <BackpackModalBody />
             </Modal>
         </div>
     )
 }
-
+ 
 export default Header
