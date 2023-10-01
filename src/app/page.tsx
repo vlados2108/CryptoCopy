@@ -27,6 +27,7 @@ const Home = (): ReactElement => {
     const [coinAddId, setCoinAddId] = useState('')
     const [coinAddPrice, setCoinAddPrice] = useState(0)
     const [coinAddName, setCoinAddName] = useState('')
+    const [modalWidth, setModalWidth] = useState(40)
 
     const coinsPerPage = 20
     const totalCoins = coins.length
@@ -61,6 +62,9 @@ const Home = (): ReactElement => {
             }
             setCoins(newArray)
             setOldCoins(newArray)
+            if (typeof window !== 'undefined') {
+                setModalWidth(window.innerWidth > 480 ? 10 : 30)
+            }
         })
     }, [])
 
@@ -271,7 +275,7 @@ const Home = (): ReactElement => {
             <Modal
                 active={addModalActive}
                 setActive={setAddModalActive}
-                width={window.innerWidth > 480 ? 10 : 30}
+                width={modalWidth}
             >
                 <AddModalBody
                     coinId={coinAddId}

@@ -21,7 +21,7 @@ const Header = (): ReactElement => {
         axios.get(`https://api.coincap.io/v2/assets/bitcoin`).then((res) => {
             setPrice1(res.data.data.priceUsd)
         })
-        axios.get(`https://api.coincap.io/v2/assets/ethereum`).then((res) => {
+        axios.get(`https://api.coincap.io/v2/assets/ethereum`).then((res) => {   
             setPrice2(res.data.data.priceUsd)
         })
         axios.get(`https://api.coincap.io/v2/assets/solana`).then((res) => {
