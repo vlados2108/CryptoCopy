@@ -1,7 +1,7 @@
 'use client'
 import React, { ReactElement, useEffect, useState } from 'react'
 import Button from '../Button'
-import { appPrefix, formatNumber } from '../Utility'
+import { appPrefix, formatNumber, formatPrice } from '../Utility'
 import { useGlobalContext } from '../../Context'
 import styles from './BackpackModalBody.module.scss'
 
@@ -53,6 +53,11 @@ const BackpackModalBody = (): ReactElement => {
                 <div
                     className={`${styles['backpack-column']} ${styles['header']}`}
                 >
+                    Price
+                </div>
+                <div
+                    className={`${styles['backpack-column']} ${styles['header']}`}
+                >
                     Total Price
                 </div>
                 <div
@@ -68,6 +73,9 @@ const BackpackModalBody = (): ReactElement => {
                             </div>
                             <div className={styles['backpack-column']}>
                                 {coin.count}
+                            </div>
+                            <div className={styles['backpack-column']}>
+                                {formatPrice(coin.price)}
                             </div>
                             <div className={styles['backpack-column']}>
                                 {formatNumber(coin.totalPrice)} USD
