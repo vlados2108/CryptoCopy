@@ -65,6 +65,7 @@
         .pagination {
             margin: 10px auto;
             display: flex;
+            flex-direction: row;
             gap: 3px;
             .pagination-btn {
                 width: 5vw;
@@ -136,6 +137,11 @@
                     .home-table-image {
                         width: 70%;
                     }
+                }
+            }
+            .pagination {
+                .pagination-btn {
+                    width: 10vw;
                 }
             }
         }

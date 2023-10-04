@@ -4,5 +4,12 @@
     gap: 5px;
     .filter-image {
         width: 20px;
+        &.activeup {
+
+            background: greenyellow;
+        }
+        &.activedown {
+            background: #EF4444;
+        }
     }
 }

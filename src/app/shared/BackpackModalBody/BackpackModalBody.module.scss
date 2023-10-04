@@ -10,7 +10,7 @@
     }
     .backpack-body {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         justify-content: center;
         .backpack-column {
             align-self: center;
@@ -33,13 +33,12 @@
 }
 
 @media (max-width: 480px) {
-    .backpack-container {
+    .backpackContainer {
 
         .backpack-header {
             font-size: calc(
                 30px + (40 - 30) * ((100vw - 390px) / (1920 - 390))
             );
-            font-weight: 600;
         }
         .backpack-body {
             
