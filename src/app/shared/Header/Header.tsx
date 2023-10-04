@@ -47,7 +47,7 @@ const Header = (): ReactElement => {
         Promise.all(fetchCurrentPrices).then((prices) => {
             const currSum = prices.reduce((acc, curr) => acc + curr, 0)
             const diffUsd = currSum-mySum
-            const diffPerc = (currSum-mySum)/mySum*100
+            const diffPerc = diffUsd/mySum*100
 
             setBackpackSum(mySum)
             setDiffUsd(diffUsd)
@@ -89,7 +89,7 @@ const Header = (): ReactElement => {
                     className={`${styles['header-backpack-text']} ${styles['diff']}`}
                 >
                     {diffUsd > 0 ? '+' : ''}
-                    {formatNumber(diffUsd)} ({formatNumber(diffPerc)} %)
+                    {formatNumber(diffUsd)} ({diffPerc? formatNumber(diffPerc): '0'}%) 
                 </div>
             </div>
             <Modal
