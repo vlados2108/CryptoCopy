@@ -115,10 +115,14 @@ const CoinInfo = ({ params }: ICoinInfoProps): ReactElement => {
             <div className={styles['coininfo-container']}>
                 <div className={styles['coininfo-name-container']}>
                     <img src={info.image} className={styles['coininfo-logo']} />
-                    <div className={`${styles['coininfo-text']} ${styles['name']}`}>
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['name']}`}
+                    >
                         {info.name}
                     </div>
-                    <div className={`${styles['coininfo-text']} ${styles['symbol']}`}>
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['symbol']}`}
+                    >
                         {info.symbol}
                     </div>
                     <Link href={'/'}>
@@ -129,40 +133,67 @@ const CoinInfo = ({ params }: ICoinInfoProps): ReactElement => {
                     </Link>
                 </div>
 
-                <div className={`${styles['coininfo-text']} ${styles['price']}`}>
+                <div
+                    className={`${styles['coininfo-text']} ${styles['price']}`}
+                >
                     {info.priceUsd < 0.01
                         ? info.priceUsd.toFixed(7)
                         : formatPrice(info.priceUsd)}{' '}
                     $
                 </div>
                 <div className={styles['coininfo-text-key-value-container']}>
-                    <div className={`${styles['coininfo-text']} ${styles['key']}`}>Rank: </div>
-                    <div className={`${styles['coininfo-text']} ${styles['value']}`}>
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['key']}`}
+                    >
+                        Rank:{' '}
+                    </div>
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['value']}`}
+                    >
                         #{info.rank}
                     </div>
                 </div>
 
                 <div className={styles['coininfo-text-key-value-container']}>
-                    <div className={`${styles['coininfo-text']} ${styles['key']}`}>Supply: </div>
-                    <div className={`${styles['coininfo-text']} ${styles['value']}`}>
-                        {formatNumber(info.supply)} {info.symbol}
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['key']}`}
+                    >
+                        Supply:{' '}
+                    </div>
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['value']}`}
+                    >
+                        {info.supply
+                            ? formatNumber(info.supply) + ' ' + info.symbol
+                            : '-'}
                     </div>
                 </div>
                 <div className={styles['coininfo-text-key-value-container']}>
-                    <div className={`${styles['coininfo-text']} ${styles['key']}`}>
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['key']}`}
+                    >
                         Max Supply:{' '}
                     </div>
-                    <div className={`${styles['coininfo-text']} ${styles['value']}`}>
-                        {info.maxSupply ? formatNumber(info.maxSupply) : '-'}{' '}
-                        {info.symbol}
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['value']}`}
+                    >
+                        {info.maxSupply
+                            ? formatNumber(info.maxSupply) + ' ' + info.symbol
+                            : '-'}
                     </div>
                 </div>
                 <div className={styles['coininfo-text-key-value-container']}>
-                    <div className={`${styles['coininfo-text']} ${styles['key']}`}>
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['key']}`}
+                    >
                         Market Cap:{' '}
                     </div>
-                    <div className={`${styles['coininfo-text']} ${styles['value']}`}>
-                        {formatNumber(info.marketCapUsd)}$
+                    <div
+                        className={`${styles['coininfo-text']} ${styles['value']}`}
+                    >
+                        {info.marketCapUsd
+                            ? formatNumber(info.marketCapUsd) + '$'
+                            : '-'}
                     </div>
                 </div>
             </div>
