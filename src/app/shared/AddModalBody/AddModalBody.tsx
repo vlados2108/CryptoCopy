@@ -22,9 +22,9 @@ const AddModalBody = ({
     const [error, setError] = useState<any>(null)
     const { coinAdded, setCoinAdded } = useGlobalContext()
     const MAX_COUNT = 10000
-    const MIN_COUNT = 1
+    const MIN_COUNT = 0
     const handleAdd = () => {
-        const count = parseInt(n)
+        const count = parseFloat(n)
         if (count < MIN_COUNT || count > MAX_COUNT) {
             setError(
                 new Error('Count of coins should be in range of 1 to 10000')
