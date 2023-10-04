@@ -11,7 +11,8 @@ import styles from './Header.module.scss'
 const Header = (): ReactElement => {
     const [coins, setCoins] = useState<Coin[]>([])
     const [backpackSum, setBackpackSum] = useState(0)
-    const [diff, setDiff] = useState(0)
+    const [diffUsd, setDiffUsd] = useState(0)
+    const [diffPerc, setDiffPerc] = useState(0)
     const [modalWidth, setModalWidth] = useState(40)
 
     const [backpackModalActive, setBackpackModalActive] = useState(false)
@@ -45,10 +46,12 @@ const Header = (): ReactElement => {
         }
         Promise.all(fetchCurrentPrices).then((prices) => {
             const currSum = prices.reduce((acc, curr) => acc + curr, 0)
-            const diff = mySum - currSum
+            const diffUsd = currSum-mySum
+            const diffPerc = (currSum-mySum)/mySum*100
 
             setBackpackSum(mySum)
-            setDiff(diff)
+            setDiffUsd(diffUsd)
+            setDiffPerc(diffPerc)
         })
     }, [coinAdded])
 
@@ -85,8 +88,8 @@ const Header = (): ReactElement => {
                 <div
                     className={`${styles['header-backpack-text']} ${styles['diff']}`}
                 >
-                    {diff > 0 ? '+' : ''}
-                    {formatNumber(diff)} ({formatNumber(diff / 100)} %)
+                    {diffUsd > 0 ? '+' : ''}
+                    {formatNumber(diffUsd)} ({formatNumber(diffPerc)} %)
                 </div>
             </div>
             <Modal
