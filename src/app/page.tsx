@@ -1,5 +1,11 @@
 'use client'
-import { ReactElement, useEffect, useState } from 'react'
+import {
+    Dispatch,
+    ReactElement,
+    SetStateAction,
+    useEffect,
+    useState,
+} from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import Input from './shared/Input'
@@ -21,6 +27,7 @@ import styles from './home.module.scss'
 const Home = (): ReactElement => {
     const [coins, setCoins] = useState<Coin[]>([])
     const [oldCoins, setOldCoins] = useState<Coin[]>([])
+    const [allCoins, setAllCoins] = useState<Coin[]>([])
     const [currentPage, setCurrentPage] = useState(1)
     const [filterModalActive, setFilterModalActive] = useState(false)
     const [addModalActive, setAddModalActive] = useState(false)
@@ -29,24 +36,33 @@ const Home = (): ReactElement => {
     const [coinAddName, setCoinAddName] = useState('')
     const [modalWidth, setModalWidth] = useState(40)
 
-    const coinsPerPage = 20
-    const totalCoins = coins.length
-
-    const indexOfLastCoin = currentPage * coinsPerPage
-    const indexOfFirstCoin = indexOfLastCoin - coinsPerPage
-    const currentCoins = coins.slice(indexOfFirstCoin, indexOfLastCoin)
-
-    const totalPages = Math.ceil(totalCoins / coinsPerPage)
-
-    const handlePageChange = (pageNumber: number) => {
-        setCurrentPage(pageNumber)
-    }
-
+    const totalPages = 100
     const router = useRouter()
+
     useEffect(() => {
-        axios.get(`https://api.coincap.io/v2/assets`).then(async (res) => {
+        getCoins('https://api.coincap.io/v2/assets/?limit=2000', [setAllCoins])
+        if (typeof window !== 'undefined') {
+            setModalWidth(window.innerWidth > 480 ? 10 : 30)
+        }
+    }, [])
+
+    useEffect(() => {
+        getCoins(
+            `https://api.coincap.io/v2/assets/?limit=20&offset=${
+                20 * (currentPage - 1)
+            }`,
+            [setCoins, setOldCoins]
+        )
+    }, [currentPage])
+
+    const getCoins = (
+        url: string,
+        setCoins: Dispatch<SetStateAction<Coin[]>>[]
+    ) => {
+        let newArray: Coin[] = []
+        axios.get(url).then((res) => {
             const originalArray = res.data.data as CoinResponse[]
-            let newArray: Coin[] = []
+
             if (Array.isArray(originalArray)) {
                 newArray = originalArray.map((obj) => {
                     return {
@@ -59,18 +75,17 @@ const Home = (): ReactElement => {
                         logoUrl: getLogoUrl(obj.symbol),
                     }
                 })
-            }
-            setCoins(newArray)
-            setOldCoins(newArray)
-            if (typeof window !== 'undefined') {
-                setModalWidth(window.innerWidth > 480 ? 10 : 30)
+                setCoins.map((setCoin)=>{setCoin(newArray)})
             }
         })
-    }, [])
+    }
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber)
+    }
 
     const onSearch = (searchValue: string) => {
         if (searchValue.length >= 2) {
-            const results = oldCoins.filter((coin) => {
+            const results = allCoins.filter((coin) => {
                 return coin.name
                     .toLowerCase()
                     .includes(searchValue.toLowerCase())
@@ -181,7 +196,7 @@ const Home = (): ReactElement => {
                             Buy
                         </div>
                     </div>
-                    {currentCoins.map((coin) => {
+                    {coins.map((coin) => {
                         return (
                             <div key={coin.id}>
                                 <div
@@ -218,7 +233,10 @@ const Home = (): ReactElement => {
                                     <div
                                         className={styles['home-table-column']}
                                     >
-                                        {formatPrice(coin.marketCapUsd)} $
+                                        {coin.marketCapUsd
+                                            ? formatPrice(coin.marketCapUsd) +
+                                              '$'
+                                            : '-'}
                                     </div>
                                     <div
                                         className={
@@ -227,7 +245,11 @@ const Home = (): ReactElement => {
                                                 : `${styles['home-table-column']} ${styles['percent-green']}`
                                         }
                                     >
-                                        {formatPrice(coin.changePercent24Hr)}%
+                                        {coin.changePercent24Hr
+                                            ? formatPrice(
+                                                  coin.changePercent24Hr
+                                              ) + '%'
+                                            : '-'}
                                     </div>
                                     <div
                                         className={styles['home-table-column']}
@@ -251,7 +273,7 @@ const Home = (): ReactElement => {
                         )
                     })}
 
-                    <div className={styles['pagination']}>
+                    {/* <div className={styles['pagination']}>
                         {Array.from({ length: totalPages }).map((_, index) => (
                             <Button
                                 handler={() => handlePageChange(index + 1)}
@@ -263,6 +285,113 @@ const Home = (): ReactElement => {
                                 value={(index + 1).toString()}
                             />
                         ))}
+                    </div> */}
+                    {/* <div className={styles['pagination']}>
+                        {currentPage > 1 && (
+                            <Button
+                                handler={() =>
+                                    handlePageChange(currentPage - 1)
+                                }
+                                className={styles['pagination-btn']}
+                                value="Prev"
+                            />
+                        )}
+                        {Array.from({ length: totalPages }).map((_, index) => {
+                            const pageNumber = index + 1
+
+                            if (
+                                pageNumber === 1 ||
+                                pageNumber === totalPages ||
+                                Math.abs(pageNumber - currentPage) <= 2 ||
+                                pageNumber === currentPage - 1 ||
+                                pageNumber === currentPage + 1
+                            ) {
+                                return (
+                                    <Button
+                                        key={pageNumber}
+                                        handler={() =>
+                                            handlePageChange(pageNumber)
+                                        }
+                                        className={
+                                            currentPage === pageNumber
+                                                ? `${styles['pagination-btn']} ${styles['active']}`
+                                                : styles['pagination-btn']
+                                        }
+                                        value={pageNumber.toString()}
+                                    />
+                                )
+                            } else if (
+                                pageNumber === currentPage - 2 ||
+                                pageNumber === currentPage + 2
+                            ) {
+                                return <span key={pageNumber}>...</span>
+                            }
+                        })}
+                        {currentPage < totalPages && (
+                            <Button
+                                handler={() =>
+                                    handlePageChange(currentPage + 1)
+                                }
+                                className={styles['pagination-btn']}
+                                value="Next"
+                            />
+                        )}
+                    </div> */}
+                    <div className={styles['pagination']}>
+                        {currentPage > 1 && (
+                            <Button
+                                handler={() =>
+                                    handlePageChange(currentPage - 1)
+                                }
+                                className={styles['pagination-btn']}
+                                value="Prev"
+                            />
+                        )}
+                        {Array.from({ length: totalPages }).map((_, index) => {
+                            const pageNumber = index + 1
+
+                            if (
+                                pageNumber === 1 ||
+                                pageNumber === totalPages ||
+                                Math.abs(pageNumber - currentPage) <= 2 ||
+                                pageNumber === currentPage - 1 ||
+                                pageNumber === currentPage + 1
+                            ) {
+                                return (
+                                    <Button
+                                        key={pageNumber}
+                                        handler={() =>
+                                            handlePageChange(pageNumber)
+                                        }
+                                        className={
+                                            currentPage === pageNumber
+                                                ? `${styles['pagination-btn']} ${styles['active']}`
+                                                : styles['pagination-btn']
+                                        }
+                                        value={pageNumber.toString()}
+                                    />
+                                )
+                            } else if (
+                                pageNumber === currentPage - 2 &&
+                                pageNumber !== 2
+                            ) {
+                                return <span key={pageNumber}>...</span>
+                            } else if (
+                                pageNumber === currentPage + 2 &&
+                                pageNumber !== totalPages - 1
+                            ) {
+                                return <span key={pageNumber}>...</span>
+                            }
+                        })}
+                        {currentPage < totalPages && (
+                            <Button
+                                handler={() =>
+                                    handlePageChange(currentPage + 1)
+                                }
+                                className={styles['pagination-btn']}
+                                value="Next"
+                            />
+                        )}
                     </div>
                 </div>
             </div>
